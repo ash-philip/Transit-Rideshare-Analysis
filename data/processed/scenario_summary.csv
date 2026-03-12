@@ -1,0 +1,5 @@
+scenario_name,scenario_boardings,scenario_revenue,scenario_total_cost,scenario_farebox_recovery
+Higher Fare Increase,7953.42,36612.18,39259.3,0.93
+Moderate Fare Increase,8117.42,35668.56,39259.3,0.91
+Base Case,8199.42,34313.19,39259.3,0.87
+Fare Increase + Cost Pressure,8117.42,35668.56,42400.04,0.84
