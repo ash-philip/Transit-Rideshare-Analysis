@@ -50,11 +50,12 @@ This project approaches the problem as both an analytics and decision-support us
     - Modeling Dataset  
     - Descriptive and Diagnostic Analytics  
     - Forecasting  
-  - Scenario Analysis
+  	- Scenario Analysis
+
 
 ## Repository Structure
 
-
+```
 transit-rideshare-analytics/
 ├── data/
 │   ├── raw/
@@ -66,7 +67,7 @@ transit-rideshare-analytics/
 ├── docs/
 ├── dashboards/
 └── outputs/
-
+```
 ## Pipeline Components
 
 ### 1. Synthetic Data Generation
