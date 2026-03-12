@@ -172,3 +172,17 @@ transit-rideshare-analytics/
 	•	alternative elasticity assumptions
 	•	dashboard development in Power BI or Tableau
 	•	sensitivity analysis across multiple planning scenarios
+
+## Sample Visuals
+
+### Monthly Boardings
+![Monthly Boardings](outputs/charts/monthly_boardings.png)
+
+### Farebox Recovery
+![Farebox Recovery](outputs/charts/farebox_recovery.png)
+
+### 12-Month Boardings Forecast
+![12-Month Boardings Forecast](outputs/charts/monthly_boardings_forecast.png)
+
+### Scenario Comparison: Farebox Recovery
+![Scenario Farebox Recovery](outputs/charts/scenario_farebox_recovery.png)
