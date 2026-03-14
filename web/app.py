@@ -1,5 +1,8 @@
 from pathlib import Path
 import streamlit as st
+import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
 
 
 st.set_page_config(
@@ -11,6 +14,8 @@ st.set_page_config(
 BASE_DIR = Path(__file__).resolve().parent
 ASSETS_DIR = BASE_DIR / "assets"
 CSS_FILE = BASE_DIR / "styles.css"
+PROJECT_ROOT = BASE_DIR.parent
+DATA_DIR = PROJECT_ROOT / "data" / "processed"
 
 
 def load_css() -> None:
@@ -30,8 +35,63 @@ def section_title(title: str) -> None:
 def section_text(text: str) -> None:
     st.markdown(f"<p class='section-text'>{text}</p>", unsafe_allow_html=True)
 
+def load_master_data() -> pd.DataFrame:
+    df = pd.read_csv(DATA_DIR / "rs_monthly_master.csv")
+    df["date"] = pd.to_datetime(df["year_month"] + "-01")
+    return df
+
+
+def load_business_forecast() -> pd.DataFrame:
+    df = pd.read_csv(DATA_DIR / "business_forecast_12m.csv")
+    df["date"] = pd.to_datetime(df["date"])
+    return df
+
+
+def load_farebox_history_forecast() -> pd.DataFrame:
+    df = pd.read_csv(DATA_DIR / "farebox_recovery_history_forecast.csv")
+    df["date"] = pd.to_datetime(df["date"])
+    return df
+
+
+def load_scenario_summary() -> pd.DataFrame:
+    return pd.read_csv(DATA_DIR / "scenario_summary.csv")
+
+def style_plotly(fig: go.Figure) -> go.Figure:
+    fig.update_layout(
+        template="plotly_dark",
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(255,255,255,0.02)",
+        font=dict(color="#e5e7eb", family="Inter, sans-serif"),
+        margin=dict(l=20, r=20, t=60, b=20),
+        title=dict(font=dict(size=22)),
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1.0,
+            bgcolor="rgba(0,0,0,0)"
+        ),
+    )
+    fig.update_xaxes(
+        showgrid=False,
+        zeroline=False,
+        title_font=dict(size=14),
+        tickfont=dict(size=12),
+    )
+    fig.update_yaxes(
+        gridcolor="rgba(255,255,255,0.08)",
+        zeroline=False,
+        title_font=dict(size=14),
+        tickfont=dict(size=12),
+    )
+    return fig
 
 load_css()
+master_df = load_master_data()
+business_forecast_df = load_business_forecast()
+farebox_history_forecast_df = load_farebox_history_forecast()
+scenario_summary_df = load_scenario_summary()
 
 st.markdown(
     """
@@ -138,19 +198,66 @@ section_text(
 )
 
 c1, c2 = st.columns(2)
-with c1:
-    if image_path("monthly_boardings.png").exists():
-        st.image(str(image_path("monthly_boardings.png")), caption="Monthly Boardings", use_container_width=True)
-with c2:
-    if image_path("revenue_vs_total_cost.png").exists():
-        st.image(str(image_path("revenue_vs_total_cost.png")), caption="Revenue vs Total Cost", use_container_width=True)
 
-if image_path("farebox_recovery_over_time.png").exists():
-    st.image(
-        str(image_path("farebox_recovery_over_time.png")),
-        caption="Farebox Recovery Over Time",
-        use_container_width=True,
+with c1:
+    fig_boardings = px.line(
+        master_df,
+        x="date",
+        y="boardings",
+        title="Monthly Boardings",
     )
+    fig_boardings.update_traces(line=dict(color="#60a5fa", width=3))
+    fig_boardings.update_yaxes(title="Boardings")
+    fig_boardings.update_xaxes(title="Date")
+    st.plotly_chart(
+        style_plotly(fig_boardings),
+        use_container_width=True,
+        config={"displayModeBar": False, "responsive": True},
+    )
+
+with c2:
+    fig_rev_cost = go.Figure()
+    fig_rev_cost.add_trace(
+        go.Scatter(
+            x=master_df["date"],
+            y=master_df["revenue"],
+            mode="lines",
+            name="Revenue",
+            line=dict(color="#60a5fa", width=3),
+        )
+    )
+    fig_rev_cost.add_trace(
+        go.Scatter(
+            x=master_df["date"],
+            y=master_df["total_cost"],
+            mode="lines",
+            name="Total Cost",
+            line=dict(color="#facc15", width=3),
+        )
+    )
+    fig_rev_cost.update_layout(title="Revenue vs Total Cost")
+    fig_rev_cost.update_yaxes(title="Amount ($)")
+    fig_rev_cost.update_xaxes(title="Date")
+    st.plotly_chart(
+        style_plotly(fig_rev_cost),
+        use_container_width=True,
+        config={"displayModeBar": False, "responsive": True},
+    )
+
+fig_farebox = px.line(
+    master_df,
+    x="date",
+    y="farebox_recovery",
+    title="Farebox Recovery Over Time",
+)
+fig_farebox.update_traces(line=dict(color="#86efac", width=3))
+fig_farebox.update_yaxes(title="Farebox Recovery", tickformat=".0%")
+fig_farebox.update_xaxes(title="Date")
+st.plotly_chart(
+    style_plotly(fig_farebox),
+    use_container_width=True,
+    config={"displayModeBar": False, "responsive": True},
+)
 
 st.markdown(
     """
@@ -179,20 +286,43 @@ section_text(
 )
 
 c3, c4 = st.columns(2)
+
 with c3:
-    if image_path("boardings_forecast_12m.png").exists():
-        st.image(
-            str(image_path("boardings_forecast_12m.png")),
-            caption="12-Month Boardings Forecast",
-            use_container_width=True,
-        )
+    fig_forecast_boardings = px.line(
+        business_forecast_df,
+        x="date",
+        y="forecast_boardings",
+        title="12-Month Boardings Forecast",
+    )
+    fig_forecast_boardings.update_traces(line=dict(color="#60a5fa", width=3))
+    fig_forecast_boardings.update_yaxes(title="Forecast Boardings")
+    fig_forecast_boardings.update_xaxes(title="Date")
+    st.plotly_chart(
+        style_plotly(fig_forecast_boardings),
+        use_container_width=True,
+        config={"displayModeBar": False, "responsive": True},
+    )
+
 with c4:
-    if image_path("farebox_recovery_history_forecast.png").exists():
-        st.image(
-            str(image_path("farebox_recovery_history_forecast.png")),
-            caption="Historical and Forecasted Farebox Recovery",
-            use_container_width=True,
-        )
+    fig_hist_forecast = px.line(
+        farebox_history_forecast_df,
+        x="date",
+        y="farebox_recovery_value",
+        color="series_type",
+        title="Historical and Forecasted Farebox Recovery",
+        color_discrete_map={
+            "Historical": "#38bdf8",
+            "Forecast": "#a7f3d0",
+        },
+    )
+    fig_hist_forecast.update_traces(line=dict(width=3))
+    fig_hist_forecast.update_yaxes(title="Farebox Recovery", tickformat=".0%")
+    fig_hist_forecast.update_xaxes(title="Date")
+    st.plotly_chart(
+        style_plotly(fig_hist_forecast),
+        use_container_width=True,
+        config={"displayModeBar": False, "responsive": True},
+    )
 
 st.markdown(
     """
