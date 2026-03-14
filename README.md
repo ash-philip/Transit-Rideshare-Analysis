@@ -198,11 +198,13 @@ transit-rideshare-analytics/
 ### Example setup
 
 ```bash
-	git clone <your-repo-url>
+	git clone <https://github.com/ash-philip/Transit-Rideshare-Analysis>
 	cd Transit-Rideshare-Analysis
 	python3 -m venv .venv
 	source .venv/bin/activate
 	pip install -r requirements.txt
+
+	# Run the notebooks in this order
 
 	python3 src/generate_synthetic_data.py
 	python3 src/build_monthly_spine.py
