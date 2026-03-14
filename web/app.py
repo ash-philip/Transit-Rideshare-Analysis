@@ -100,12 +100,12 @@ st.markdown(
             <div class="eyebrow">Portfolio Project • Synthetic Data • Transit Analytics</div>
             <h1 class="hero-title">Transit Rideshare Analytics Pipeline</h1>
             <p class="hero-subtitle">
-                A story-driven analytics project using synthetic transit data to evaluate ridership recovery,
-                financial sustainability, forecasting, and pricing tradeoffs.
+                An end-to-end analytics project using synthetic transit rideshare data to evaluate service recovery,
+                financial sustainability, forecasted performance, and pricing tradeoffs.
             </p>
             <p class="hero-hook">
-                From disruption to recovery to planning: how can a transit agency sustain performance
-                and improve farebox recovery?
+                As demand returns, transit agencies still face a harder question: are recent gains sustainable, and what
+                policy choices improve long-term cost recovery without undermining ridership?
             </p>
         </div>
     </div>
@@ -118,16 +118,17 @@ st.markdown("<div class='spacer'></div>", unsafe_allow_html=True)
 section_title("Why This Matters")
 section_text(
     """
-    Public transit services are not evaluated through ridership alone. Agencies must balance demand,
-    revenue, operating cost, and long-term financial sustainability. Even when a service begins to recover,
-    leadership still needs to understand whether recent gains are durable and what actions could improve
-    future outcomes.
+    Transit agencies are expected to provide reliable, accessible service while operating within financial constraints.
+    For rideshare and vanpool programs in particular, performance depends not only on ridership, but also on how
+    operating cost, pricing, and recovery trends evolve over time.
     """
 )
 section_text(
     """
-    This project explores that problem through a synthetic transit rideshare use case, using an end-to-end
-    analytics pipeline that moves from data generation and ETL to forecasting and scenario analysis.
+    Even when demand begins to recover, agency leadership still needs to determine whether that recovery is strong enough
+    to support long-term financial sustainability. This project approaches that challenge through a synthetic transit
+    rideshare use case, using an end-to-end analytics pipeline that moves from data generation and ETL to forecasting
+    and scenario analysis.
     """
 )
 
@@ -135,45 +136,59 @@ st.markdown("<div class='spacer'></div>", unsafe_allow_html=True)
 
 section_title("Performance Snapshot")
 section_text(
-    "At a glance, the service shows meaningful ridership volume, moderate cost recovery, and a cost structure that makes long-term financial monitoring important."
+    "The service carries substantial ridership volume, generates meaningful revenue, and shows moderate cost recovery, but the financial outlook remains sensitive to pricing and operating cost assumptions."
 )
 
+total_boardings = int(master_df["boardings"].sum())
+total_revenue = master_df["revenue"].sum()
+avg_farebox_recovery = master_df["farebox_recovery"].mean()
+avg_cost_per_boarding = master_df["cost_per_boarding"].mean()
+
+formatted_total_boardings = f"{total_boardings:,.0f}"
+formatted_total_revenue = f"${total_revenue / 1_000_000:.2f}M"
+formatted_avg_farebox = f"{avg_farebox_recovery:.2%}"
+formatted_avg_cost_per_boarding = f"${avg_cost_per_boarding:.2f}"
+
 col1, col2, col3, col4 = st.columns(4)
+
 with col1:
     st.markdown(
-        """
+        f"""
         <div class="kpi-card">
-            <div class="kpi-value">551,895</div>
+            <div class="kpi-value">{formatted_total_boardings}</div>
             <div class="kpi-label">Total Boardings</div>
         </div>
         """,
         unsafe_allow_html=True,
     )
+
 with col2:
     st.markdown(
-        """
+        f"""
         <div class="kpi-card">
-            <div class="kpi-value">$2.31M</div>
+            <div class="kpi-value">{formatted_total_revenue}</div>
             <div class="kpi-label">Total Revenue</div>
         </div>
         """,
         unsafe_allow_html=True,
     )
+
 with col3:
     st.markdown(
-        """
+        f"""
         <div class="kpi-card">
-            <div class="kpi-value">74.76%</div>
+            <div class="kpi-value">{formatted_avg_farebox}</div>
             <div class="kpi-label">Avg Farebox Recovery</div>
         </div>
         """,
         unsafe_allow_html=True,
     )
+
 with col4:
     st.markdown(
-        """
+        f"""
         <div class="kpi-card">
-            <div class="kpi-value">$5.94</div>
+            <div class="kpi-value">{formatted_avg_cost_per_boarding}</div>
             <div class="kpi-label">Avg Cost per Boarding</div>
         </div>
         """,
@@ -185,15 +200,15 @@ st.markdown("<div class='spacer'></div>", unsafe_allow_html=True)
 section_title("Chapter 1: Recovery Was Real, But Uneven")
 section_text(
     """
-    Ridership fell sharply during the disruption period and then recovered gradually over time. Revenue generally
-    followed the same pattern, while total operating cost remained more stable. As a result, financial recovery
-    lagged demand recovery in some periods and improved only as ridership became more consistent.
+    Service demand declined sharply during the pandemic period and then recovered gradually over time. Revenue moved
+    in the same direction, but total operating cost remained more stable, which created sustained pressure on cost
+    recovery during lower-demand periods.
     """
 )
 section_text(
     """
-    The recovery story was not just about demand returning. It was also about whether revenue could recover fast
-    enough to close the gap with operating cost.
+    For an agency, this distinction matters. Recovery is not defined by ridership alone. It also depends on whether
+    returning demand is sufficient to improve financial performance and narrow the gap between revenue and operating cost.
     """
 )
 
@@ -262,8 +277,8 @@ st.plotly_chart(
 st.markdown(
     """
     <div class="takeaway-box">
-        <strong>Takeaway:</strong> The service recovered meaningfully, but the improvement in financial performance
-        was more gradual than the improvement in ridership alone.
+        <strong>Agency takeaway:</strong> Ridership recovery was meaningful, but financial recovery was slower and less
+        consistent because operating cost remained comparatively stable throughout the recovery period.
     </div>
     """,
     unsafe_allow_html=True,
@@ -274,14 +289,16 @@ st.markdown("<div class='spacer'></div>", unsafe_allow_html=True)
 section_title("Chapter 2: The Next Year Looks Stable, But Not Fully Solved")
 section_text(
     """
-    To move beyond historical reporting, the project develops a forward-looking view of service demand and financial
-    performance. The baseline forecast suggests that ridership remains relatively stable over the next year, while
-    farebox recovery continues to fluctuate seasonally rather than improve in a straight line.
+    Looking ahead, the baseline forecast suggests that ridership remains relatively stable over the next 12 months.
+    However, farebox recovery continues to fluctuate seasonally rather than improve in a straight line, which indicates
+    that recent progress may be leveling off rather than accelerating.
     """
 )
 section_text(
     """
-    This matters because it shifts the agency’s challenge from short-term recovery to long-term sustainability.
+    For agency planning, this shifts the challenge from short-term recovery to long-term sustainability. A stable outlook
+    is encouraging, but it does not eliminate the need to test how future pricing or cost changes could alter the agency’s
+    financial position.
     """
 )
 
@@ -328,8 +345,8 @@ with c4:
 st.markdown(
     """
     <div class="takeaway-box">
-        <strong>Takeaway:</strong> The baseline outlook is steady, but not fully optimized. Future pricing and cost
-        assumptions still meaningfully affect long-term performance.
+        <strong>Agency takeaway:</strong> The baseline outlook is stable, but not fully resolved. Future gains remain
+        sensitive to pricing assumptions and ongoing operating cost pressure.
     </div>
     """,
     unsafe_allow_html=True,
@@ -340,14 +357,15 @@ st.markdown("<div class='spacer'></div>", unsafe_allow_html=True)
 section_title("Chapter 3: Pricing Helps, But Tradeoffs Matter")
 section_text(
     """
-    Scenario analysis was used to evaluate how alternative fare and cost assumptions affect boardings, revenue,
-    and farebox recovery. Under the current assumptions, higher fares improve farebox recovery, but they also
-    reduce ridership. This means that the strongest financial result is not automatically the best policy.
+    Scenario analysis was used to test how alternative fare and cost assumptions affect ridership and cost recovery.
+    Under the current assumptions, higher fares improve farebox recovery, but they also reduce boardings. That means
+    the strongest financial result is not automatically the most balanced operational strategy.
     """
 )
 section_text(
     """
-    A moderate fare increase may offer a more balanced tradeoff between financial improvement and ridership preservation.
+    From an agency perspective, the more practical question is not simply which scenario maximizes recovery, but which
+    scenario improves financial performance while preserving enough ridership to support service goals and long-term demand.
     """
 )
 
@@ -403,9 +421,8 @@ with c6:
 st.markdown(
     """
     <div class="takeaway-box">
-        <strong>Key takeaway:</strong> Higher fare increases produce the strongest farebox recovery under the current
-        assumptions, but moderate fare increases may represent a more balanced strategy when ridership preservation
-        also matters.
+        <strong>Agency takeaway:</strong> Higher fare increases produce the strongest recovery under current assumptions,
+        but a moderate fare increase may offer a more balanced path by improving cost recovery while limiting ridership loss.
     </div>
     """,
     unsafe_allow_html=True,
@@ -416,15 +433,15 @@ st.markdown("<div class='spacer'></div>", unsafe_allow_html=True)
 section_title("Final Takeaway")
 section_text(
     """
-    The rideshare service appears to have recovered meaningfully, but recent gains may be difficult to sustain without
-    targeted action. Forecasting and scenario analysis suggest that future progress depends not just on continued demand,
-    but on how pricing and cost pressure are managed together.
+    The rideshare service appears to have recovered meaningfully, but the analysis suggests that recent gains may be
+    difficult to sustain without targeted action. Forecasting and scenario analysis indicate that future performance will
+    depend not only on continued demand, but also on how pricing and operating cost pressure are managed together.
     """
 )
 section_text(
     """
-    This project demonstrates how an analytics workflow can move beyond descriptive reporting and support more strategic,
-    decision-oriented planning.
+    In practice, this means the agency’s challenge is no longer simply restoring service performance. It is determining
+    which decisions can improve long-term financial sustainability without undermining ridership and service value.
     """
 )
 
@@ -437,7 +454,9 @@ with left:
     section_text(
         """
         This project was built as a full analytics pipeline using synthetic transit data designed to preserve realistic
-        business structure and temporal behavior without using confidential source data.
+        service, cost, and recovery patterns without using confidential or proprietary agency data. The workflow combines
+        data generation, ETL, KPI development, forecasting, and scenario analysis to support a more decision-oriented view
+        of transit performance.
         """
     )
 with right:
