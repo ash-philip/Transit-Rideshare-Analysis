@@ -352,20 +352,53 @@ section_text(
 )
 
 c5, c6 = st.columns(2)
+
+scenario_order = [
+    "Base Case",
+    "Moderate Fare Increase",
+    "Higher Fare Increase",
+    "Fare Increase + Cost Pressure",
+]
+
+scenario_plot_df = scenario_summary_df.copy()
+scenario_plot_df["scenario_name"] = pd.Categorical(
+    scenario_plot_df["scenario_name"],
+    categories=scenario_order,
+    ordered=True,
+)
+scenario_plot_df = scenario_plot_df.sort_values("scenario_name")
+
 with c5:
-    if image_path("avg_farebox_recovery_by_scenario.png").exists():
-        st.image(
-            str(image_path("avg_farebox_recovery_by_scenario.png")),
-            caption="Average Farebox Recovery by Scenario",
-            use_container_width=True,
-        )
+    fig_scenario_recovery = px.bar(
+        scenario_plot_df,
+        x="scenario_name",
+        y="scenario_farebox_recovery",
+        title="Average Farebox Recovery by Scenario",
+    )
+    fig_scenario_recovery.update_traces(marker_color="#86efac")
+    fig_scenario_recovery.update_yaxes(title="Avg Farebox Recovery", tickformat=".0%")
+    fig_scenario_recovery.update_xaxes(title="Scenario")
+    st.plotly_chart(
+        style_plotly(fig_scenario_recovery),
+        use_container_width=True,
+        config={"displayModeBar": False, "responsive": True},
+    )
+
 with c6:
-    if image_path("avg_boardings_by_scenario.png").exists():
-        st.image(
-            str(image_path("avg_boardings_by_scenario.png")),
-            caption="Average Boardings by Scenario",
-            use_container_width=True,
-        )
+    fig_scenario_boardings = px.bar(
+        scenario_plot_df,
+        x="scenario_name",
+        y="scenario_boardings",
+        title="Average Boardings by Scenario",
+    )
+    fig_scenario_boardings.update_traces(marker_color="#facc15")
+    fig_scenario_boardings.update_yaxes(title="Avg Boardings")
+    fig_scenario_boardings.update_xaxes(title="Scenario")
+    st.plotly_chart(
+        style_plotly(fig_scenario_boardings),
+        use_container_width=True,
+        config={"displayModeBar": False, "responsive": True},
+    )
 
 st.markdown(
     """
