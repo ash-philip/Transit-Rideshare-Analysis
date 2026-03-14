@@ -186,3 +186,36 @@ transit-rideshare-analytics/
 
 ### Scenario Comparison: Farebox Recovery
 ![Scenario Farebox Recovery](outputs/charts/scenario_farebox_recovery.png)
+
+## How to Run
+
+	1. Clone the repository.
+	2. Create and activate a Python virtual environment.
+	3. Install dependencies from `requirements.txt`.
+	4. Run the scripts in `src/` to generate synthetic data and processed datasets.
+	5. Open the notebooks in `notebooks/` to review descriptive analytics, forecasting, and scenario analysis.
+
+### Example setup
+
+```bash
+	git clone <your-repo-url>
+	cd Transit-Rideshare-Analysis
+	python3 -m venv .venv
+	source .venv/bin/activate
+	pip install -r requirements.txt
+
+	python3 src/generate_synthetic_data.py
+	python3 src/build_monthly_spine.py
+	python3 src/build_master_dataset.py
+	python3 src/build_modeling_dataset.py
+	python3 src/validate_data.py
+```
+
+## Key Deliverables
+
+	- Synthetic monthly transit operations and cost datasets
+	- Master KPI dataset for analytics and reporting
+	- Modeling dataset with lag and rolling features
+	- 12-month and 24-month boarding forecasts
+	- 12-month business forecast for revenue, cost, and farebox recovery
+	- Scenario analysis outputs comparing fare and cost assumptions
