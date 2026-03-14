@@ -1,1 +1,129 @@
+html, body, [class*="css"] {
+    font-family: Inter, system-ui, sans-serif;
+}
+
+.stApp {
+    background: linear-gradient(180deg, #0b1020 0%, #101827 100%);
+    color: #f3f4f6;
+}
+
+.hero {
+    padding: 4rem 1rem 2rem 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.hero-inner {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.eyebrow {
+    color: #38bdf8;
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.hero-title {
+    font-size: 3.2rem;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    color: #f8fafc;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem;
+    color: #cbd5e1;
+    max-width: 900px;
+    margin-bottom: 1rem;
+}
+
+.hero-hook {
+    font-size: 1.05rem;
+    color: #94a3b8;
+    max-width: 850px;
+}
+
+.section-title {
+    margin-top: 0.5rem;
+    margin-bottom: 0.75rem;
+    color: #f8fafc;
+    font-size: 2rem;
+}
+
+.section-text {
+    color: #cbd5e1;
+    line-height: 1.8;
+    font-size: 1.02rem;
+    max-width: 1000px;
+}
+
+.kpi-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px;
+    padding: 1.4rem 1rem;
+    text-align: center;
+    margin-top: 0.75rem;
+    margin-bottom: 0.75rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+}
+
+.kpi-value {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #f8fafc;
+    margin-bottom: 0.35rem;
+}
+
+.kpi-label {
+    color: #94a3b8;
+    font-size: 0.95rem;
+}
+
+.takeaway-box {
+    background: rgba(56,189,248,0.08);
+    border: 1px solid rgba(56,189,248,0.22);
+    border-radius: 16px;
+    padding: 1rem 1.2rem;
+    margin-top: 1rem;
+    color: #dbeafe;
+}
+
+.method-box {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px;
+    padding: 1rem 1.2rem;
+}
+
+.method-title {
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: #f8fafc;
+}
+
+.method-box ul {
+    margin: 0;
+    padding-left: 1.2rem;
+    color: #cbd5e1;
+    line-height: 1.7;
+}
+
+.links-box a {
+    display: inline-block;
+    margin-top: 0.5rem;
+    color: #38bdf8;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.links-box a:hover {
+    text-decoration: underline;
+}
+
+.spacer {
+    height: 2rem;
+}
 
