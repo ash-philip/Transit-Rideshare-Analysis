@@ -318,6 +318,7 @@ with c4:
     fig_hist_forecast.update_traces(line=dict(width=3))
     fig_hist_forecast.update_yaxes(title="Farebox Recovery", tickformat=".0%")
     fig_hist_forecast.update_xaxes(title="Date")
+    fig_hist_forecast.update_layout(legend_title_text="")
     st.plotly_chart(
         style_plotly(fig_hist_forecast),
         use_container_width=True,
