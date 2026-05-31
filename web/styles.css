@@ -3,18 +3,18 @@ html, body, [class*="css"] {
 }
 
 .stApp {
-    background: linear-gradient(180deg, #0b1020 0%, #101827 100%);
+    background: linear-gradient(180deg, #0a1220 0%, #111827 48%, #0f172a 100%);
     color: #f3f4f6;
 }
 
 .hero {
-    padding: 3.2rem 1rem 1.8rem 1rem;
+    padding: 2.5rem 1rem 1.65rem 1rem;
     border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
 .hero-inner {
-    max-width: 1000px;
-    margin: 0 auto;
+    max-width: 1120px;
+    margin: 0;
 }
 
 .eyebrow {
@@ -26,12 +26,12 @@ html, body, [class*="css"] {
 }
 
 .hero-title {
-    font-size: 3.5rem;
+    font-size: 3.35rem;
     line-height: 1.05;
     margin-bottom: 1rem;
     color: #f8fafc;
     font-weight: 800;
-    letter-spacing: -0.02em;
+    letter-spacing: 0;
 }
 
 .hero-subtitle {
@@ -53,9 +53,9 @@ html, body, [class*="css"] {
     margin-top: 0.5rem;
     margin-bottom: 0.85rem;
     color: #f8fafc;
-    font-size: 2.2rem;
+    font-size: 1.9rem;
     font-weight: 800;
-    letter-spacing: -0.01em;
+    letter-spacing: 0;
 }
 
 .section-text {
@@ -68,7 +68,7 @@ html, body, [class*="css"] {
 .kpi-card {
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 18px;
+    border-radius: 8px;
     padding: 1.55rem 1rem;
     text-align: center;
     margin-top: 0.75rem;
@@ -92,7 +92,7 @@ html, body, [class*="css"] {
 .takeaway-box {
     background: rgba(56,189,248,0.08);
     border: 1px solid rgba(56,189,248,0.22);
-    border-radius: 16px;
+    border-radius: 8px;
     padding: 1.1rem 1.25rem;
     margin-top: 1rem;
     color: #e4f3ff;
@@ -103,7 +103,7 @@ html, body, [class*="css"] {
 .method-box {
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 18px;
+    border-radius: 8px;
     padding: 1.1rem 1.3rem;
 }
 
@@ -138,3 +138,20 @@ html, body, [class*="css"] {
     height: 2rem;
 }
 
+[data-testid="stSidebar"] {
+    background: #0b1220;
+    border-right: 1px solid rgba(255,255,255,0.08);
+}
+
+[data-testid="stSidebar"] label,
+[data-testid="stSidebar"] p,
+[data-testid="stSidebar"] span {
+    color: #d7e0ea;
+}
+
+[data-testid="stMetric"] {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 1rem;
+}
