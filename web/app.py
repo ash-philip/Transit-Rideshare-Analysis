@@ -1,7 +1,7 @@
 import streamlit as st
 
 from components import charts
-from components.kpis import metric_row
+from components.kpis import info_card_row, metric_row
 from components.layout import (
     load_css,
     page_header,
@@ -12,7 +12,14 @@ from components.layout import (
     takeaway,
 )
 from services.data_loader import load_command_center_data
-from services.metrics import latest_program_metrics, performance_snapshot
+from services.metrics import (
+    executive_kpis,
+    forecast_outlook,
+    latest_program_metrics,
+    performance_snapshot,
+    program_health_status,
+    scenario_recommendation,
+)
 
 
 CHART_CONFIG = {"displayModeBar": False, "responsive": True}
@@ -25,32 +32,36 @@ st.set_page_config(
 )
 
 
-def render_executive_overview(master_df) -> None:
+def render_executive_overview(master_df, business_forecast_df, scenario_summary_df) -> None:
     section_title("Executive Overview")
     section_text(
         """
-        This command center summarizes rideshare program performance, financial sustainability,
-        forecast direction, and planning scenarios for leadership review.
+        This view summarizes the current rideshare operating picture for leadership: demand, financial recovery,
+        near-term forecast posture, and scenario tradeoffs. Forecasts and scenarios are planning tools based on
+        current assumptions, not guaranteed outcomes.
         """
     )
 
-    metric_row(performance_snapshot(master_df))
+    metric_row(executive_kpis(master_df))
     spacer()
 
-    section_title("Why This Matters")
-    section_text(
-        """
-        Transit agencies are expected to provide reliable, accessible service while operating within financial
-        constraints. For rideshare and vanpool programs in particular, performance depends not only on ridership,
-        but also on how operating cost, pricing, and recovery trends evolve over time.
-        """
+    info_card_row(
+        [
+            program_health_status(master_df),
+            forecast_outlook(business_forecast_df),
+            scenario_recommendation(scenario_summary_df),
+        ]
     )
-    section_text(
-        """
-        Even when demand begins to recover, agency leadership still needs to determine whether that recovery is strong
-        enough to support long-term financial sustainability.
-        """
-    )
+    spacer()
+
+    section_title("Leadership Trends")
+    c1, c2 = st.columns(2)
+    with c1:
+        st.plotly_chart(charts.monthly_boardings(master_df), use_container_width=True, config=CHART_CONFIG)
+    with c2:
+        st.plotly_chart(charts.revenue_vs_total_cost(master_df), use_container_width=True, config=CHART_CONFIG)
+
+    st.plotly_chart(charts.farebox_recovery(master_df), use_container_width=True, config=CHART_CONFIG)
 
 
 def render_program_health(master_df) -> None:
@@ -232,7 +243,7 @@ def main() -> None:
     ) = load_command_center_data()
 
     if section == "Executive Overview":
-        render_executive_overview(master_df)
+        render_executive_overview(master_df, business_forecast_df, scenario_summary_df)
     elif section == "Program Health":
         render_program_health(master_df)
     elif section == "Forecast Center":

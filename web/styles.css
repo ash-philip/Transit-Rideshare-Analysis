@@ -69,24 +69,90 @@ html, body, [class*="css"] {
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(255,255,255,0.08);
     border-radius: 8px;
-    padding: 1.55rem 1rem;
+    padding: 1.2rem 0.85rem;
     text-align: center;
     margin-top: 0.75rem;
     margin-bottom: 0.75rem;
     box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    min-height: 138px;
 }
 
 .kpi-value {
-    font-size: 2.45rem;
+    font-size: 1.95rem;
     font-weight: 800;
     color: #f8fafc;
     margin-bottom: 0.4rem;
+    line-height: 1.12;
 }
 
 
 .kpi-label {
     color: #9fb0c2;
-    font-size: 1rem;
+    font-size: 0.92rem;
+    line-height: 1.35;
+}
+
+.kpi-delta {
+    color: #cbd5e1;
+    font-size: 0.82rem;
+    margin-top: 0.55rem;
+    line-height: 1.3;
+}
+
+.info-card {
+    background: rgba(255,255,255,0.045);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-left: 4px solid #38bdf8;
+    border-radius: 8px;
+    padding: 1.1rem 1.15rem;
+    min-height: 224px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.16);
+}
+
+.info-card-positive {
+    border-left-color: #86efac;
+}
+
+.info-card-watch {
+    border-left-color: #facc15;
+}
+
+.info-card-risk {
+    border-left-color: #fb7185;
+}
+
+.info-card-neutral {
+    border-left-color: #38bdf8;
+}
+
+.info-card-label {
+    color: #9fb0c2;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.55rem;
+    text-transform: uppercase;
+}
+
+.info-card-status {
+    color: #f8fafc;
+    font-size: 1.35rem;
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 0.7rem;
+}
+
+.info-card-summary {
+    color: #e2e8f0;
+    font-size: 0.98rem;
+    line-height: 1.55;
+    margin-bottom: 0.75rem;
+}
+
+.info-card-detail {
+    color: #a8b6c8;
+    font-size: 0.9rem;
+    line-height: 1.55;
 }
 
 .takeaway-box {
