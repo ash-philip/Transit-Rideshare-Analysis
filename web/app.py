@@ -363,39 +363,48 @@ section_text(
 )
 
 c5, c6 = st.columns(2)
+
 with c5:
-    fig_scenario_recovery = px.bar(
-        scenario_summary_df,
-        x="scenario_name",
-        y="scenario_farebox_recovery",
-        title="Average Farebox Recovery by Scenario",
+    st.markdown(
+        """
+        <div class="chart-card">
+            <div class="chart-header">
+                <div>
+                    <p class="chart-title">Farebox Recovery Rate</p>
+                    <p class="chart-caption">Simulated agency cost-recovery across policy levers</p>
+                </div>
+            </div>
+    """,
+        unsafe_allow_html=True,
     )
-    fig_scenario_recovery.update_traces(marker_color="#86efac")
-    fig_scenario_recovery.update_yaxes(
-        title="Avg Farebox Recovery", tickformat=".0%"
-    )
-    fig_scenario_recovery.update_xaxes(title="Scenario")
+
     st.plotly_chart(
         style_plotly(fig_scenario_recovery),
         use_container_width=True,
         config={"displayModeBar": False, "responsive": True},
     )
+    st.markdown("</div>", unsafe_allow_html=True)
 
 with c6:
-    fig_scenario_boardings = px.bar(
-        scenario_summary_df,
-        x="scenario_name",
-        y="scenario_boardings",
-        title="Average Boardings by Scenario",
+    st.markdown(
+        """
+        <div class="chart-card">
+            <div class="chart-header">
+                <div>
+                    <p class="chart-title">Projected Monthly Boardings</p>
+                    <p class="chart-caption">Estimated demand elasticity impact by scenario</p>
+                </div>
+            </div>
+    """,
+        unsafe_allow_html=True,
     )
-    fig_scenario_boardings.update_traces(marker_color="#facc15")
-    fig_scenario_boardings.update_yaxes(title="Avg Boardings")
-    fig_scenario_boardings.update_xaxes(title="Scenario")
+
     st.plotly_chart(
         style_plotly(fig_scenario_boardings),
         use_container_width=True,
         config={"displayModeBar": False, "responsive": True},
     )
+    st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown(
     """
