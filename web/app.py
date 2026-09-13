@@ -1,9 +1,8 @@
 from pathlib import Path
-import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-
+import streamlit as st
 
 st.set_page_config(
     page_title="Transit Rideshare Analytics Pipeline",
@@ -11,6 +10,7 @@ st.set_page_config(
     layout="wide",
 )
 
+# --- DIRECTORY CONFIGURATION ---
 BASE_DIR = Path(__file__).resolve().parent
 ASSETS_DIR = BASE_DIR / "assets"
 CSS_FILE = BASE_DIR / "styles.css"
@@ -18,14 +18,98 @@ PROJECT_ROOT = BASE_DIR.parent
 DATA_DIR = PROJECT_ROOT / "data" / "processed"
 
 
-def load_css() -> None:
+# --- PERFORMANCE: CACHED IO & DATA INGESTION ---
+@st.cache_data(show_spinner=False)
+def get_custom_css() -> str:
+    """Cache stylesheet in memory so disk is not accessed on rerun."""
     if CSS_FILE.exists():
         with open(CSS_FILE, "r", encoding="utf-8") as f:
-            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+            return f.read()
+    return ""
 
 
-def image_path(filename: str) -> Path:
-    return ASSETS_DIR / filename
+def apply_css() -> None:
+    css = get_custom_css()
+    if css:
+        st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
+
+
+@st.cache_data(show_spinner=False)
+def load_all_data():
+    """Load, parse, and pre-structure all datasets in a single cached pass."""
+    # 1. Master Historical Data
+    master_df = pd.read_csv(DATA_DIR / "rs_monthly_master.csv")
+    master_df["date"] = pd.to_datetime(master_df["year_month"] + "-01")
+
+    # Pre-calculated KPI string formatting
+    kpis = {
+        "boardings": f"{int(master_df['boardings'].sum()):,.0f}",
+        "revenue": f"${master_df['revenue'].sum() / 1_000_000:.2f}M",
+        "farebox": f"{master_df['farebox_recovery'].mean():.2%}",
+        "cost_per_boarding": f"${master_df['cost_per_boarding'].mean():.2f}",
+    }
+
+    # 2. Business Forecast
+    forecast_df = pd.read_csv(DATA_DIR / "business_forecast_12m.csv")
+    forecast_df["date"] = pd.to_datetime(forecast_df["date"])
+
+    # 3. Farebox Recovery History vs Forecast
+    farebox_df = pd.read_csv(DATA_DIR / "farebox_recovery_history_forecast.csv")
+    farebox_df["date"] = pd.to_datetime(farebox_df["date"])
+
+    # 4. Scenario Summary with Ordered Categoricals
+    scenario_df = pd.read_csv(DATA_DIR / "scenario_summary.csv")
+    scenario_order = [
+        "Base Case",
+        "Moderate Fare Increase",
+        "Higher Fare Increase",
+        "Fare Increase + Cost Pressure",
+    ]
+    scenario_df["scenario_name"] = pd.Categorical(
+        scenario_df["scenario_name"], categories=scenario_order, ordered=True
+    )
+    scenario_df = scenario_df.sort_values("scenario_name").reset_index(
+        drop=True
+    )
+
+    return master_df, forecast_df, farebox_df, scenario_df, kpis
+
+
+# Static Plotly template configuration
+PLOTLY_TEMPLATE = go.layout.Template(
+    layout=go.Layout(
+        template="plotly_dark",
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(255,255,255,0.02)",
+        font=dict(color="#e5e7eb", family="Inter, sans-serif"),
+        margin=dict(l=20, r=20, t=60, b=20),
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1.0,
+            bgcolor="rgba(0,0,0,0)",
+        ),
+        xaxis=dict(
+            showgrid=False,
+            zeroline=False,
+            title_font=dict(size=14),
+            tickfont=dict(size=12),
+        ),
+        yaxis=dict(
+            gridcolor="rgba(255,255,255,0.08)",
+            zeroline=False,
+            title_font=dict(size=14),
+            tickfont=dict(size=12),
+        ),
+    )
+)
+
+
+def style_plotly(fig: go.Figure) -> go.Figure:
+    fig.update_layout(template=PLOTLY_TEMPLATE)
+    return fig
 
 
 def section_title(title: str) -> None:
@@ -35,64 +119,18 @@ def section_title(title: str) -> None:
 def section_text(text: str) -> None:
     st.markdown(f"<p class='section-text'>{text}</p>", unsafe_allow_html=True)
 
-def load_master_data() -> pd.DataFrame:
-    df = pd.read_csv(DATA_DIR / "rs_monthly_master.csv")
-    df["date"] = pd.to_datetime(df["year_month"] + "-01")
-    return df
 
+# --- INITIALIZATION ---
+apply_css()
+(
+    master_df,
+    business_forecast_df,
+    farebox_history_forecast_df,
+    scenario_summary_df,
+    kpis,
+) = load_all_data()
 
-def load_business_forecast() -> pd.DataFrame:
-    df = pd.read_csv(DATA_DIR / "business_forecast_12m.csv")
-    df["date"] = pd.to_datetime(df["date"])
-    return df
-
-
-def load_farebox_history_forecast() -> pd.DataFrame:
-    df = pd.read_csv(DATA_DIR / "farebox_recovery_history_forecast.csv")
-    df["date"] = pd.to_datetime(df["date"])
-    return df
-
-
-def load_scenario_summary() -> pd.DataFrame:
-    return pd.read_csv(DATA_DIR / "scenario_summary.csv")
-
-def style_plotly(fig: go.Figure) -> go.Figure:
-    fig.update_layout(
-        template="plotly_dark",
-        paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(255,255,255,0.02)",
-        font=dict(color="#e5e7eb", family="Inter, sans-serif"),
-        margin=dict(l=20, r=20, t=60, b=20),
-        title=dict(font=dict(size=22)),
-        legend=dict(
-            orientation="h",
-            yanchor="bottom",
-            y=1.02,
-            xanchor="right",
-            x=1.0,
-            bgcolor="rgba(0,0,0,0)"
-        ),
-    )
-    fig.update_xaxes(
-        showgrid=False,
-        zeroline=False,
-        title_font=dict(size=14),
-        tickfont=dict(size=12),
-    )
-    fig.update_yaxes(
-        gridcolor="rgba(255,255,255,0.08)",
-        zeroline=False,
-        title_font=dict(size=14),
-        tickfont=dict(size=12),
-    )
-    return fig
-
-load_css()
-master_df = load_master_data()
-business_forecast_df = load_business_forecast()
-farebox_history_forecast_df = load_farebox_history_forecast()
-scenario_summary_df = load_scenario_summary()
-
+# --- HERO SECTION ---
 st.markdown(
     """
     <div class="hero">
@@ -134,69 +172,33 @@ section_text(
 
 st.markdown("<div class='spacer'></div>", unsafe_allow_html=True)
 
+# --- KPI METRIC STRIP ---
 section_title("Performance Snapshot")
 section_text(
     "The service carries substantial ridership volume, generates meaningful revenue, and shows moderate cost recovery, but the financial outlook remains sensitive to pricing and operating cost assumptions."
 )
 
-total_boardings = int(master_df["boardings"].sum())
-total_revenue = master_df["revenue"].sum()
-avg_farebox_recovery = master_df["farebox_recovery"].mean()
-avg_cost_per_boarding = master_df["cost_per_boarding"].mean()
-
-formatted_total_boardings = f"{total_boardings:,.0f}"
-formatted_total_revenue = f"${total_revenue / 1_000_000:.2f}M"
-formatted_avg_farebox = f"{avg_farebox_recovery:.2%}"
-formatted_avg_cost_per_boarding = f"${avg_cost_per_boarding:.2f}"
-
 col1, col2, col3, col4 = st.columns(4)
-
-with col1:
-    st.markdown(
-        f"""
-        <div class="kpi-card">
-            <div class="kpi-value">{formatted_total_boardings}</div>
-            <div class="kpi-label">Total Boardings</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-with col2:
-    st.markdown(
-        f"""
-        <div class="kpi-card">
-            <div class="kpi-value">{formatted_total_revenue}</div>
-            <div class="kpi-label">Total Revenue</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-with col3:
-    st.markdown(
-        f"""
-        <div class="kpi-card">
-            <div class="kpi-value">{formatted_avg_farebox}</div>
-            <div class="kpi-label">Avg Farebox Recovery</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-with col4:
-    st.markdown(
-        f"""
-        <div class="kpi-card">
-            <div class="kpi-value">{formatted_avg_cost_per_boarding}</div>
-            <div class="kpi-label">Avg Cost per Boarding</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+col1.markdown(
+    f"""<div class="kpi-card"><div class="kpi-value">{kpis['boardings']}</div><div class="kpi-label">Total Boardings</div></div>""",
+    unsafe_allow_html=True,
+)
+col2.markdown(
+    f"""<div class="kpi-card"><div class="kpi-value">{kpis['revenue']}</div><div class="kpi-label">Total Revenue</div></div>""",
+    unsafe_allow_html=True,
+)
+col3.markdown(
+    f"""<div class="kpi-card"><div class="kpi-value">{kpis['farebox']}</div><div class="kpi-label">Avg Farebox Recovery</div></div>""",
+    unsafe_allow_html=True,
+)
+col4.markdown(
+    f"""<div class="kpi-card"><div class="kpi-value">{kpis['cost_per_boarding']}</div><div class="kpi-label">Avg Cost per Boarding</div></div>""",
+    unsafe_allow_html=True,
+)
 
 st.markdown("<div class='spacer'></div>", unsafe_allow_html=True)
 
+# --- CHAPTER 1: HISTORICAL RECOVERY ---
 section_title("Chapter 1: Recovery Was Real, But Uneven")
 section_text(
     """
@@ -213,13 +215,9 @@ section_text(
 )
 
 c1, c2 = st.columns(2)
-
 with c1:
     fig_boardings = px.line(
-        master_df,
-        x="date",
-        y="boardings",
-        title="Monthly Boardings",
+        master_df, x="date", y="boardings", title="Monthly Boardings"
     )
     fig_boardings.update_traces(line=dict(color="#60a5fa", width=3))
     fig_boardings.update_yaxes(title="Boardings")
@@ -260,10 +258,7 @@ with c2:
     )
 
 fig_farebox = px.line(
-    master_df,
-    x="date",
-    y="farebox_recovery",
-    title="Farebox Recovery Over Time",
+    master_df, x="date", y="farebox_recovery", title="Farebox Recovery Over Time"
 )
 fig_farebox.update_traces(line=dict(color="#86efac", width=3))
 fig_farebox.update_yaxes(title="Farebox Recovery", tickformat=".0%")
@@ -286,6 +281,7 @@ st.markdown(
 
 st.markdown("<div class='spacer'></div>", unsafe_allow_html=True)
 
+# --- CHAPTER 2: FORECAST ---
 section_title("Chapter 2: The Next Year Looks Stable, But Not Fully Solved")
 section_text(
     """
@@ -303,7 +299,6 @@ section_text(
 )
 
 c3, c4 = st.columns(2)
-
 with c3:
     fig_forecast_boardings = px.line(
         business_forecast_df,
@@ -327,10 +322,7 @@ with c4:
         y="farebox_recovery_value",
         color="series_type",
         title="Historical and Forecasted Farebox Recovery",
-        color_discrete_map={
-            "Historical": "#38bdf8",
-            "Forecast": "#a7f3d0",
-        },
+        color_discrete_map={"Historical": "#38bdf8", "Forecast": "#a7f3d0"},
     )
     fig_hist_forecast.update_traces(line=dict(width=3))
     fig_hist_forecast.update_yaxes(title="Farebox Recovery", tickformat=".0%")
@@ -354,6 +346,7 @@ st.markdown(
 
 st.markdown("<div class='spacer'></div>", unsafe_allow_html=True)
 
+# --- CHAPTER 3: SCENARIO ANALYSIS ---
 section_title("Chapter 3: Pricing Helps, But Tradeoffs Matter")
 section_text(
     """
@@ -370,31 +363,17 @@ section_text(
 )
 
 c5, c6 = st.columns(2)
-
-scenario_order = [
-    "Base Case",
-    "Moderate Fare Increase",
-    "Higher Fare Increase",
-    "Fare Increase + Cost Pressure",
-]
-
-scenario_plot_df = scenario_summary_df.copy()
-scenario_plot_df["scenario_name"] = pd.Categorical(
-    scenario_plot_df["scenario_name"],
-    categories=scenario_order,
-    ordered=True,
-)
-scenario_plot_df = scenario_plot_df.sort_values("scenario_name")
-
 with c5:
     fig_scenario_recovery = px.bar(
-        scenario_plot_df,
+        scenario_summary_df,
         x="scenario_name",
         y="scenario_farebox_recovery",
         title="Average Farebox Recovery by Scenario",
     )
     fig_scenario_recovery.update_traces(marker_color="#86efac")
-    fig_scenario_recovery.update_yaxes(title="Avg Farebox Recovery", tickformat=".0%")
+    fig_scenario_recovery.update_yaxes(
+        title="Avg Farebox Recovery", tickformat=".0%"
+    )
     fig_scenario_recovery.update_xaxes(title="Scenario")
     st.plotly_chart(
         style_plotly(fig_scenario_recovery),
@@ -404,7 +383,7 @@ with c5:
 
 with c6:
     fig_scenario_boardings = px.bar(
-        scenario_plot_df,
+        scenario_summary_df,
         x="scenario_name",
         y="scenario_boardings",
         title="Average Boardings by Scenario",
@@ -430,6 +409,7 @@ st.markdown(
 
 st.markdown("<div class='spacer'></div>", unsafe_allow_html=True)
 
+# --- CONCLUSION & METHODOLOGY ---
 section_title("Final Takeaway")
 section_text(
     """
@@ -448,7 +428,6 @@ section_text(
 st.markdown("<div class='spacer'></div>", unsafe_allow_html=True)
 
 section_title("Methodology")
-
 left, right = st.columns([2, 1])
 with left:
     section_text(
@@ -481,7 +460,6 @@ st.markdown("<div class='spacer'></div>", unsafe_allow_html=True)
 
 section_title("Project Links")
 section_text("Explore the repository, documentation, and project assets below.")
-
 st.markdown(
     """
     <div class="links-box">
@@ -490,4 +468,3 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-
