@@ -371,6 +371,11 @@ def scenario_simulator_signal(
     avg_gap = adjusted_scenario_df["recovery_gap"].mean()
     months_below_target = int((~adjusted_scenario_df["target_status"]).sum())
     months_above_target = len(adjusted_scenario_df) - months_below_target
+    gap_direction = "above" if avg_gap >= 0 else "below"
+    gap_text = (
+        f"Average monthly revenue is {format_currency(abs(avg_gap))} "
+        f"{gap_direction} the revenue needed to meet the target."
+    )
 
     if avg_recovery >= normalized_target and months_below_target == 0:
         status = "Average recovery meets target"
@@ -403,7 +408,7 @@ def scenario_simulator_signal(
             f"{scenario_name} averages {format_percent(avg_recovery)} recovery versus a "
             f"{format_percent(normalized_target)} planning target. {target_context} "
             f"Monthly threshold performance: {months_below_target} of {len(adjusted_scenario_df)} months are below target. "
-            f"Average monthly recovery gap is {format_currency(avg_gap)}."
+            f"{gap_text}"
         ),
     }
 
