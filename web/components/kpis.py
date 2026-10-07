@@ -83,6 +83,11 @@ def planning_input_grid(items: list[dict[str, str]]) -> None:
     )
 
 
+def _flat_html(html: str) -> str:
+    """Remove indentation and blank lines so markdown does not render HTML as a code block."""
+    return " ".join(line.strip() for line in html.splitlines() if line.strip())
+
+
 def planning_signal_card(card: dict[str, object]) -> None:
     tone = card.get("tone", "neutral")
     metrics = card.get("metrics", [])
@@ -95,8 +100,7 @@ def planning_signal_card(card: dict[str, object]) -> None:
         """
         for metric in metrics
     )
-    st.markdown(
-        f"""
+    html = f"""
         <div class="planning-signal-card signal-card-{tone}">
             <div class="planning-signal-topline">
                 <div class="info-card-label">{card["title"]}</div>
@@ -107,9 +111,8 @@ def planning_signal_card(card: dict[str, object]) -> None:
             </div>
             <div class="planning-signal-summary">{card["summary"]}</div>
         </div>
-        """,
-        unsafe_allow_html=True,
-    )
+        """
+    st.markdown(_flat_html(html), unsafe_allow_html=True)
 
 
 def planning_signal_grid(cards: list[dict[str, object]], columns_per_row: int = 2) -> None:
@@ -132,11 +135,9 @@ def watch_area_grid(items: list[dict[str, str]]) -> None:
         """
         for item in items
     )
-    st.markdown(
-        f"""
+    html = f"""
         <div class="watch-area-grid">
             {item_html}
         </div>
-        """,
-        unsafe_allow_html=True,
-    )
+        """
+    st.markdown(_flat_html(html), unsafe_allow_html=True)
