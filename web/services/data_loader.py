@@ -62,6 +62,16 @@ def load_business_forecast() -> pd.DataFrame:
     return _parse_date_column(df, "business_forecast_12m.csv")
 
 
+def load_boardings_forecast_12m() -> pd.DataFrame:
+    df = _read_processed_csv("boardings_forecast_12m.csv")
+    return _parse_date_column(df, "boardings_forecast_12m.csv")
+
+
+def load_boardings_forecast_24m() -> pd.DataFrame:
+    df = _read_processed_csv("boardings_forecast_24m.csv")
+    return _parse_date_column(df, "boardings_forecast_24m.csv")
+
+
 def load_farebox_history_forecast() -> pd.DataFrame:
     df = _read_processed_csv("farebox_recovery_history_forecast.csv")
     return _parse_date_column(df, "farebox_recovery_history_forecast.csv")
@@ -71,10 +81,19 @@ def load_scenario_summary() -> pd.DataFrame:
     return _read_processed_csv("scenario_summary.csv")
 
 
-def load_command_center_data() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+def load_command_center_data() -> tuple[
+    pd.DataFrame,
+    pd.DataFrame,
+    pd.DataFrame,
+    pd.DataFrame,
+    pd.DataFrame,
+    pd.DataFrame,
+]:
     return (
         load_master_data(),
         load_business_forecast(),
+        load_boardings_forecast_12m(),
+        load_boardings_forecast_24m(),
         load_farebox_history_forecast(),
         load_scenario_summary(),
     )

@@ -7,9 +7,21 @@ html, body, [class*="css"] {
     color: #f3f4f6;
 }
 
-.hero {
-    padding: 2.5rem 1rem 1.65rem 1rem;
+.block-container {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+    max-width: 1500px;
+}
+
+.app-header-shell {
     border-bottom: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 0.5rem;
+    padding: 1.35rem 0 1.15rem 0;
+}
+
+.hero {
+    padding: 0;
+    border-bottom: 0;
 }
 
 .hero-inner {
@@ -19,27 +31,27 @@ html, body, [class*="css"] {
 
 .eyebrow {
     color: #38bdf8;
-    font-size: 0.9rem;
-    margin-bottom: 0.75rem;
+    font-size: 0.78rem;
+    margin-bottom: 0.35rem;
     letter-spacing: 0.04em;
     text-transform: uppercase;
 }
 
 .hero-title {
-    font-size: 3.35rem;
+    font-size: 2.35rem;
     line-height: 1.05;
-    margin-bottom: 1rem;
+    margin-bottom: 0.45rem;
     color: #f8fafc;
     font-weight: 800;
     letter-spacing: 0;
 }
 
 .hero-subtitle {
-    font-size: 1.28rem;
+    font-size: 1.02rem;
     color: #dbe4f0;
     max-width: 920px;
-    margin-bottom: 1rem;
-    line-height: 1.7;
+    margin-bottom: 0;
+    line-height: 1.55;
 }
 
 .hero-hook {
@@ -63,6 +75,29 @@ html, body, [class*="css"] {
     line-height: 1.9;
     font-size: 1.08rem;
     max-width: 1050px;
+}
+
+.planning-note {
+    color: #cbd5e1;
+    background: rgba(148,163,184,0.08);
+    border: 1px solid rgba(148,163,184,0.18);
+    border-radius: 8px;
+    font-size: 0.92rem;
+    line-height: 1.55;
+    margin: 0.8rem 0 0.4rem 0;
+    max-width: 1050px;
+    padding: 0.85rem 1rem;
+}
+
+.dashboard-note {
+    color: #94a3b8;
+    background: rgba(148,163,184,0.045);
+    border: 1px solid rgba(148,163,184,0.12);
+    border-radius: 8px;
+    font-size: 0.84rem;
+    line-height: 1.5;
+    margin: 1rem 0 0.2rem 0;
+    padding: 0.65rem 0.85rem;
 }
 
 .kpi-card {
@@ -155,6 +190,84 @@ html, body, [class*="css"] {
     line-height: 1.55;
 }
 
+.signal-card {
+    align-items: center;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-left: 4px solid #38bdf8;
+    border-radius: 8px;
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    margin: 0.25rem 0 0.85rem 0;
+    padding: 0.85rem 1rem;
+}
+
+.signal-card-positive {
+    border-left-color: #86efac;
+}
+
+.signal-card-watch {
+    border-left-color: #facc15;
+}
+
+.signal-card-risk {
+    border-left-color: #fb7185;
+}
+
+.signal-card-neutral {
+    border-left-color: #38bdf8;
+}
+
+.signal-card-label {
+    color: #9fb0c2;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+}
+
+.signal-card-status {
+    color: #f8fafc;
+    font-size: 1.08rem;
+    font-weight: 800;
+    line-height: 1.25;
+    min-width: 180px;
+}
+
+.signal-card-summary {
+    color: #cbd5e1;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    text-align: right;
+}
+
+.scenario-case-badge {
+    align-items: center;
+    background: rgba(56,189,248,0.08);
+    border: 1px solid rgba(56,189,248,0.2);
+    border-radius: 8px;
+    display: flex;
+    gap: 0.75rem;
+    justify-content: space-between;
+    margin-bottom: 0.35rem;
+    padding: 0.7rem 0.9rem;
+}
+
+.scenario-case-badge span {
+    color: #9fb0c2;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.scenario-case-badge strong {
+    color: #f8fafc;
+    font-size: 1rem;
+}
+
 .takeaway-box {
     background: rgba(56,189,248,0.08);
     border: 1px solid rgba(56,189,248,0.22);
@@ -164,6 +277,225 @@ html, body, [class*="css"] {
     color: #e4f3ff;
     font-size: 1.02rem;
     line-height: 1.8;
+}
+
+.view-selector-label {
+    color: #9fb0c2;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.55rem;
+    text-transform: uppercase;
+}
+
+.control-panel-title {
+    color: #9fb0c2;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.55rem;
+    text-transform: uppercase;
+}
+
+[role="radiogroup"] {
+    background: rgba(255,255,255,0.035);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 0.45rem;
+}
+
+[role="radiogroup"] label {
+    border-radius: 6px;
+    margin-bottom: 0.15rem;
+    min-height: 2.35rem;
+    padding: 0.2rem 0.35rem;
+}
+
+.chart-panel-heading {
+    background: rgba(255,255,255,0.035);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 0;
+    border-radius: 8px 8px 0 0;
+    margin-top: 0.05rem;
+    padding: 1rem 1.15rem 0.85rem 1.15rem;
+}
+
+.chart-panel-title {
+    color: #f8fafc;
+    font-size: 1.35rem;
+    font-weight: 800;
+    line-height: 1.25;
+    margin-bottom: 0.35rem;
+}
+
+.chart-panel-help {
+    color: #a8b6c8;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.planning-input-grid {
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 0 0 8px 8px;
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 1rem 1.15rem 1.15rem 1.15rem;
+}
+
+.planning-input-item {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 8px;
+    min-height: 82px;
+    padding: 0.85rem 0.95rem;
+}
+
+.planning-input-label {
+    color: #9fb0c2;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.42rem;
+    text-transform: uppercase;
+}
+
+.planning-input-value {
+    color: #f8fafc;
+    font-size: 1.12rem;
+    font-weight: 800;
+    line-height: 1.25;
+}
+
+.planning-signal-card {
+    background: rgba(255,255,255,0.045);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-left: 4px solid #38bdf8;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.16);
+    margin: 0.5rem 0 1rem 0;
+    min-height: 255px;
+    padding: 1.05rem 1.1rem;
+}
+
+.planning-signal-topline {
+    align-items: flex-start;
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    margin-bottom: 0.9rem;
+}
+
+.planning-signal-status {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 999px;
+    color: #f8fafc;
+    font-size: 0.82rem;
+    font-weight: 800;
+    line-height: 1.2;
+    padding: 0.35rem 0.6rem;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.signal-metric-grid {
+    display: grid;
+    gap: 0.55rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-bottom: 0.95rem;
+}
+
+.signal-metric {
+    background: rgba(255,255,255,0.035);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 8px;
+    min-height: 72px;
+    padding: 0.65rem;
+}
+
+.signal-metric span {
+    color: #9fb0c2;
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.35rem;
+    text-transform: uppercase;
+}
+
+.signal-metric strong {
+    color: #f8fafc;
+    display: block;
+    font-size: 1rem;
+    line-height: 1.2;
+}
+
+.planning-signal-summary {
+    color: #cbd5e1;
+    font-size: 0.93rem;
+    line-height: 1.5;
+}
+
+.watch-area-grid {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin: 0.5rem 0 1rem 0;
+}
+
+.watch-area-item {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    min-height: 112px;
+    padding: 0.9rem;
+}
+
+.watch-area-item span {
+    color: #9fb0c2;
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.45rem;
+    text-transform: uppercase;
+}
+
+.watch-area-item strong {
+    color: #f8fafc;
+    display: block;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    margin-bottom: 0.45rem;
+}
+
+.watch-area-item small {
+    color: #a8b6c8;
+    font-size: 0.85rem;
+    line-height: 1.35;
+}
+
+@media (max-width: 900px) {
+    .signal-card {
+        align-items: flex-start;
+        display: block;
+    }
+
+    .signal-card-summary {
+        margin-top: 0.6rem;
+        text-align: left;
+    }
+
+    .planning-input-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .signal-metric-grid,
+    .watch-area-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .method-box {

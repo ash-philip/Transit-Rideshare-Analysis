@@ -5,6 +5,13 @@ import streamlit as st
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 CSS_FILE = BASE_DIR / "styles.css"
+PAGES = [
+    "Executive Overview",
+    "Program Health",
+    "Forecast Center",
+    "Scenario Simulator",
+    "Planning Signals",
+]
 
 
 def load_css() -> None:
@@ -13,37 +20,53 @@ def load_css() -> None:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 
-def page_header() -> None:
-    st.markdown(
-        """
-        <div class="hero">
-            <div class="hero-inner">
-                <div class="eyebrow">Leadership Analytics • Synthetic Data • Planning Scenarios</div>
+def page_header() -> str:
+    if "selected_page" not in st.session_state:
+        st.session_state.selected_page = PAGES[0]
+
+    current_page = st.session_state.selected_page
+    if current_page not in PAGES:
+        current_page = PAGES[0]
+
+    st.markdown("<div class='app-header-shell'>", unsafe_allow_html=True)
+    menu_col, title_col = st.columns([0.12, 0.88], vertical_alignment="center")
+
+    with menu_col:
+        if hasattr(st, "popover"):
+            with st.popover("☰", use_container_width=True):
+                selected_page = st.radio(
+                    "Page",
+                    PAGES,
+                    index=PAGES.index(current_page),
+                    key="page_navigation_choice",
+                )
+        else:
+            selected_page = st.selectbox(
+                "Page",
+                PAGES,
+                index=PAGES.index(current_page),
+                key="page_navigation_choice",
+                label_visibility="collapsed",
+            )
+
+    with title_col:
+        st.markdown(
+            """
+            <div class="hero">
+                <div class="eyebrow">Interactive Dashboard • Synthetic Data • Planning Scenarios</div>
                 <h1 class="hero-title">Rideshare Command Center</h1>
                 <p class="hero-subtitle">
-                    A decision-support dashboard for monitoring rideshare program health, financial sustainability,
-                    forecast trends, and fare scenario tradeoffs.
+                    Monitor program health, review demand and financial trends, and compare sustainability scenarios
+                    from one decision-support workspace.
                 </p>
             </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+            """,
+            unsafe_allow_html=True,
+        )
 
-
-def sidebar_navigation() -> str:
-    st.sidebar.markdown("### Rideshare Command Center")
-    st.sidebar.caption("Program health, forecasts, and planning scenarios.")
-    return st.sidebar.radio(
-        "Navigate",
-        [
-            "Executive Overview",
-            "Program Health",
-            "Forecast Center",
-            "Scenario Simulator",
-            "Recommendations",
-        ],
-    )
+    st.markdown("</div>", unsafe_allow_html=True)
+    st.session_state.selected_page = selected_page
+    return selected_page
 
 
 def section_title(title: str) -> None:
@@ -58,7 +81,7 @@ def takeaway(text: str) -> None:
     st.markdown(
         f"""
         <div class="takeaway-box">
-            <strong>Agency takeaway:</strong> {text}
+            <strong>Dashboard signal:</strong> {text}
         </div>
         """,
         unsafe_allow_html=True,
@@ -67,3 +90,13 @@ def takeaway(text: str) -> None:
 
 def spacer() -> None:
     st.markdown("<div class='spacer'></div>", unsafe_allow_html=True)
+
+
+def view_selector(label: str, options: list[str], key: str | None = None) -> str:
+    st.markdown(f"<div class='view-selector-label'>{label}</div>", unsafe_allow_html=True)
+    return st.radio(
+        label,
+        options,
+        key=key,
+        label_visibility="collapsed",
+    )
