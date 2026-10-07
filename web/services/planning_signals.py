@@ -38,16 +38,15 @@ def program_health_signal(master_df: pd.DataFrame) -> dict[str, object]:
     cost_mom = _pct_change(latest["cost_per_boarding"], previous["cost_per_boarding"])
     revenue_gap = latest["revenue"] - latest["total_cost"]
 
-    if latest["farebox_recovery"] >= 0.95 and boardings_mom >= 0:
+    if latest["farebox_recovery"] >= 0.9 and boardings_mom >= 0:
         status = "Stable"
         tone = "positive"
-    elif latest["farebox_recovery"] < 0.9 or cost_mom > 0.03:
-        status = "Pressure"
-        tone = "risk"
-    else:
+    elif latest["farebox_recovery"] >= 0.8:
         status = "Watch"
         tone = "watch"
-
+    else:
+        status = "Pressure"
+        tone = "risk"
     return {
         "title": "Program Health Signal",
         "status": status,
@@ -212,14 +211,6 @@ def watch_areas(
             }
         )
 
-    if not farebox_history_forecast_df.empty and "farebox_recovery_value" in farebox_history_forecast_df.columns:
-        areas.append(
-            {
-                "label": "Recovery volatility",
-                "value": format_percent(farebox_history_forecast_df["farebox_recovery_value"].tail(12).mean()),
-                "status": "Review monthly threshold performance",
-            }
-        )
 
     return areas[:4]
 
