@@ -2,6 +2,8 @@
 
 ### An end-to-end analytics pipeline built with synthetic transit rideshare data to analyze ridership, revenue, operating costs, farebox recovery, forecasting, and fare scenario impacts.
 
+**[View the live app →](https://transit-rideshare-analysis.streamlit.app)**
+
 ## Project Overview
 
 ### This project simulates a public transit rideshare and vanpool analytics workflow using fully synthetic data. It was developed as a portfolio-safe version of a realistic transit business problem and demonstrates the full analytics lifecycle from synthetic data generation to forecasting and scenario analysis.
@@ -137,6 +139,7 @@ transit-rideshare-analytics/
 	•	pandas
 	•	matplotlib
 	•	statsmodels
+	•	Streamlit
 	•	Jupyter Notebook
 	•	SQL
 	•	Git / GitHub
