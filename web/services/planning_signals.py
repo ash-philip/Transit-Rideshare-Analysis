@@ -56,9 +56,9 @@ def program_health_signal(master_df: pd.DataFrame) -> dict[str, object]:
             {"label": "Latest Recovery", "value": format_percent(latest["farebox_recovery"])},
             {"label": "Cost / Boarding", "value": format_currency_unit(latest["cost_per_boarding"])},
         ],
-        "summary": (
-            f"Latest revenue is {format_currency(revenue_gap)} relative to total cost, "
-            "with ridership and recovery moving as current operating signals."
+            "summary": (
+            f"Latest month revenue is {format_currency(abs(revenue_gap))} "
+            f"{'above' if revenue_gap >= 0 else 'below'} total cost."
         ),
     }
 
