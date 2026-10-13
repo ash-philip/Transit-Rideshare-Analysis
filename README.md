@@ -70,17 +70,16 @@ This project approaches the problem as both an analytics and decision-support us
 ## Repository Structure
 
 ```
-transit-rideshare-analytics/
+Transit-Rideshare-Analysis/
 ├── data/
 │   ├── raw/
 │   ├── processed/
 │   └── scenarios/
 ├── notebooks/
 ├── src/
-├── sql/
-├── docs/
-├── dashboards/
-└── outputs/
+├── web/
+├── outputs/
+└── AGENTS.md
 ```
 ## Pipeline Components
 
@@ -107,6 +106,7 @@ transit-rideshare-analytics/
 	•	absence of nulls in key columns
 	•	uniqueness of monthly records
 	•	cost calculation consistency
+	•	positive values for boardings, service hours, revenue, and cost
 
 ### 4. Descriptive and Diagnostic Analytics
 
@@ -153,8 +153,9 @@ transit-rideshare-analytics/
 	•	statsmodels
 	•	Streamlit
 	•	Jupyter Notebook
-	•	SQL
+	•	Plotly
 	•	Git / GitHub
+	•	Codex
 
 ## Key Outputs
 
@@ -185,7 +186,6 @@ transit-rideshare-analytics/
 	•	vehicle-level or route-level simulation
 	•	more advanced cost forecasting
 	•	alternative elasticity assumptions
-	•	dashboard development in Power BI or Tableau
 	•	sensitivity analysis across multiple planning scenarios
 
 ## Sample Visuals
@@ -204,28 +204,31 @@ transit-rideshare-analytics/
 
 ## How to Run
 
-	1. Clone the repository.
-	2. Create and activate a Python virtual environment.
-	3. Install dependencies from `requirements.txt`.
-	4. Run the scripts in `src/` to generate synthetic data and processed datasets.
-	5. Open the notebooks in `notebooks/` to review descriptive analytics, forecasting, and scenario analysis.
+1. Clone the repository.
+2. Create and activate a Python virtual environment.
+3. Install dependencies from `requirements.txt`.
+4. Run the pipeline scripts in `src/` to generate synthetic data and processed datasets.
+5. Launch the dashboard with `streamlit run web/app.py`.
+6. Open notebooks 03 to 05 in `notebooks/` to review the descriptive analytics, forecasting and scenario analysis.
 
 ### Example setup
 
 ```bash
-	git clone <https://github.com/ash-philip/Transit-Rideshare-Analysis>
-	cd Transit-Rideshare-Analysis
-	python3 -m venv .venv
-	source .venv/bin/activate
-	pip install -r requirements.txt
+	git clone https://github.com/ash-philip/Transit-Rideshare-Analysis
+    cd Transit-Rideshare-Analysis
+    python3 -m venv .venv
+    source .venv/bin/activate
+    pip install -r requirements.txt
 
-	# Run the notebooks in this order
+    # Run the pipeline notebooks in this order
+    python3 src/generate_synthetic_data.py
+    python3 src/build_monthly_spine.py
+    python3 src/build_master_dataset.py
+    python3 src/build_modeling_dataset.py
+    python3 src/validate_data.py
 
-	python3 src/generate_synthetic_data.py
-	python3 src/build_monthly_spine.py
-	python3 src/build_master_dataset.py
-	python3 src/build_modeling_dataset.py
-	python3 src/validate_data.py
+    # Launch the dashboard
+    streamlit run web/app.py
 ```
 
 ## Key Deliverables
@@ -236,3 +239,4 @@ transit-rideshare-analytics/
 	- 12-month and 24-month boarding forecasts
 	- 12-month business forecast for revenue, cost, and farebox recovery
 	- Scenario analysis outputs comparing fare and cost assumptions
+	- Streamlit Command Center dashboard for monitoring, forecasting and scenario planning
