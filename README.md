@@ -8,6 +8,18 @@
 
 ### This project simulates a public transit rideshare and vanpool analytics workflow using fully synthetic data. It was developed as a portfolio-safe version of a realistic transit business problem and demonstrates the full analytics lifecycle from synthetic data generation to forecasting and scenario analysis.
 
+## Rideshare Command Center
+
+A Streamlit dashboard for leadership and operations users, built on the processed datasets. It reads precomputed CSVs from `data/processed/`.
+
+- **Executive Overview:** latest KPIs, program health, forecast outlook and scenario signal
+- **Program Health:** filtered KPIs with one focused chart at a time
+- **Forecast Center:** 12-month and 24-month demand outlook, farebox recovery outlook and planning inputs
+- **Scenario Simulator:** choose a planning case and adjust fare, demand response, cost pressure and a recovery threshold
+- **Planning Signals:** a compact board of signals and watch areas
+
+Forecasts and scenarios are planning tools based on stated assumptions, not predictions.
+
 ### The project is designed to answer how a transit agency can evaluate service performance, monitor financial sustainability, and assess the impact of pricing decisions over time.
 
 ## Business Problem
